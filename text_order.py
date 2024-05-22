@@ -122,33 +122,11 @@ def text_check(text):
 
 # Step 3.2. Form result by creating dictionary with all the lists
 def form_result(result):
-    word_list = result["counted_token"]["word_list"],
-    cyrillic_word_list = result["counted_token"]["cyrillic_word_list"],
-    latin_word_list = result["counted_token"]["latin_word_list"],
-    mixed_word_list = result["counted_token"]["mixed_word_list"],
-    digit_list = result["counted_token"]["digit_list"],
-    symbol_list = result["counted_token"]["symbol_list"],
-    correct_word_list = result["checked_word"]["correct_word_list"],
-    en_correct_word_list = result["checked_word"]["en_correct_word_list"],
-    incorrect_word_list = result["checked_word"]["incorrect_word_list"],
-    surnames_list = result["checked_word"]["surnames_list"],
-    names_list = result["checked_word"]["names_list"],
-    ban_word_list = result["checked_word"]["ban_word_list"],
-    emoticon_list = result["found_emoticon"]["emoticon_list"]
+    list_dict = []
 
-    list_dict = {"word_list": list(word_list)[0],
-                 "cyrillic_word_list": list(cyrillic_word_list)[0],
-                 "latin_word_list": list(latin_word_list)[0],
-                 "mixed_word_list": list(mixed_word_list)[0],
-                 "digit_list": list(digit_list)[0],
-                 "symbol_list": list(symbol_list)[0],
-                 "correct_word_list": list(correct_word_list)[0],
-                 "en_correct_word_list": list(en_correct_word_list)[0],
-                 "incorrect_word_list": list(incorrect_word_list)[0],
-                 "surnames_list": list(surnames_list)[0],
-                 "names_list": list(names_list)[0],
-                 "ban_word_list": list(ban_word_list)[0],
-                 "emoticon_list": emoticon_list}
+    for function_result in result.values():
+        for k, v in function_result.items():
+            list_dict.append((k, v))
 
     return list_dict
 
@@ -156,18 +134,24 @@ def form_result(result):
 # Step 3.3. Display containment of all the lists
 def display_result(result):
     print("\033[1;30;46mContainment of the lists:\033[0m")
-    for key in result.keys():
-        if len(result[key]) > 0:
-            print(f"===> \033[1m{key}\033[0m:", result[key])
+    for couple in result:
+        name_lst = couple[0]
+        lst = couple[1]
+
+        if len(lst) > 0:
+            print(f"===> \033[1m{name_lst}\033[0m:", lst)
 
 
 # Step 3.4. Count and display length of all the lists
 def count_result(result):
     print("\033[1;30;45mLength of the lists:\033[0m")
-    for key in result.keys():
-        len_key = len(result[key])
-        if len_key > 0:
-            print(f"===> \033[1m{key}\033[0m:", len_key)
+    for couple in result:
+        name_lst = couple[0]
+        lst = couple[1]
+
+        len_lst = len(lst)
+        if len_lst > 0:
+            print(f"===> \033[1m{name_lst}\033[0m:", len_lst)
 
 
 # Step 3. Call the main functions and print the main information
