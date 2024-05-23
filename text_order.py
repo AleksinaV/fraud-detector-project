@@ -40,6 +40,7 @@ def token_count(text, emoticon_list):
     tokenized_text = tokenize_text(text)
     for token in tokenized_text:
         if token.isalpha():
+            word_list.append(token)
             if re.search(r"^[а-яА-Я]+$", token):
                 cyrillic_word_list.append(token)
             elif re.search(r"^[a-zA-Z]+$", token):
@@ -51,9 +52,6 @@ def token_count(text, emoticon_list):
         else:
             if token not in emoticon_list:
                 symbol_list.append(token)
-
-        if token in cyrillic_word_list or token in latin_word_list:
-            word_list.append(token)
 
     return {"word_list": word_list,
             "cyrillic_word_list": cyrillic_word_list,
@@ -92,15 +90,21 @@ def word_check(word_list):
                     if normal_word.lower() in current_file:
                         file_dict[file_name].append(normal_word)
 
-                if (word not in correct_word_list and word not in en_correct_word_list and word not in
-                        incorrect_word_list and word not in surnames_list and word not in names_list and word not in
-                        ban_word_list):
+                in_lst = False
+                for lst in file_dict.values():
+                    if word in lst:
+                        in_lst = True
+
+                if not in_lst:
                     questionable_list.append(word)
 
     for word in questionable_list:
-        if (word not in correct_word_list and word not in en_correct_word_list and word not in
-                incorrect_word_list and word not in surnames_list and word not in names_list and word not in
-                ban_word_list):
+        in_lst = False
+        for lst in file_dict.values():
+            if word in lst:
+                in_lst = True
+
+        if not in_lst:
             incorrect_word_list.append(word)
 
     return {"correct_word_list": correct_word_list,
