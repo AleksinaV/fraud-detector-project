@@ -1,15 +1,14 @@
+import text_checker
 from fraud_detector import main
 import pickle
 
 
-# Step #1. Open and read the base_text.txt
-with open('base_text.txt', 'r', encoding='utf-8') as file:
-    base_text = file.read()
+def serialize():
+    # Open and read the base_text.txt
+    with open('base_text.txt', 'r', encoding='utf-8') as file:
+        base_text = file.read()
 
-# Step #2. Call the main() function
-result_dict = main(base_text)
-print(result_dict)
+    checked_text = text_checker.check(base_text)
 
-# pickle.dump(result_dict, open('base_result.pkl', 'w'))
-# unpickled_resilt = pickle.load('base_result.pkl')
-# print(unpickled_resilt)
+    pickle.dump(checked_text, open('base_result.pkl', 'wb'))
+    # unpickled_resilt = pickle.load(open('base_result.pkl', 'rb'))
