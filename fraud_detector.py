@@ -1,23 +1,7 @@
 # Step 0.
 # Import libraries
-import re
-# pip install emot
-import emot
-# pip install nltk
-# from nltk.tokenize import word_tokenize
-# pip install pymorphy2
-import pymorphy3
 # import pickle
-# import text_check
-
-morph = pymorphy3.MorphAnalyzer()
-
-
-# Tokenize the text into words and symbols
-def tokenize_text(text):
-    tokens = re.findall(r'(\b\w+\b|\S)', text)
-    # tokens = word_tokenize(text)
-    return tokens
+import text_checker
 
 
 # Step 3.2. Form result by creating dictionary with all the lists
@@ -56,7 +40,7 @@ def count_result(result):
 
 # Step 3. Call the main functions and print the main information
 def main(text):
-    # check_result = text_check.text_check(text)
+    check_result = text_checker.check(text)
     result_dict = form_result(check_result)
     display_result(result_dict)
     count_result(result_dict)

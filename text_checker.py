@@ -1,3 +1,19 @@
+import pymorphy3
+import emot
+import re
+# from nltk.tokenize import word_tokenize
+
+
+morph = pymorphy3.MorphAnalyzer()
+
+
+# Tokenize the text into words and symbols
+def tokenize_text(text):
+    tokens = re.findall(r'(\b\w+\b|\S)', text)
+    # tokens = word_tokenize(text)
+    return tokens
+
+
 # Step 3.1.1.
 # Append list with emoticons from the text
 def emoticon_find(text):
@@ -90,7 +106,7 @@ def word_check(word_list):
 
 
 # Step 3.1. Call the functions below to analyze the text
-def text_check(text):
+def check(text):
     found_emoticon = emoticon_find(text)
     counted_token = token_count(text, found_emoticon["emoticon_list"])
     checked_word = word_check(counted_token["word_list"])
