@@ -13,7 +13,6 @@ def tokenize_text(text):
     return tokens
 
 
-# Step 3.1.1.
 # Append list with emoticons from the text
 def emoticon_find(text):
     emot_obj = emot.core.emot()
@@ -22,8 +21,7 @@ def emoticon_find(text):
     return {"emoticon_list": emot_dict['value']}
 
 
-# Step 3.1.2.
-# Append lists with words, latin words, digits and symbols from the tokenized_text
+# Append lists with words: cyrillic, latin and mixed, digits and symbols from the tokenized_text
 def token_count(text, emoticon_list):
     word_list = []
     cyrillic_word_list = []
@@ -56,7 +54,6 @@ def token_count(text, emoticon_list):
             "symbol_list": symbol_list}
 
 
-# Step 3.1.3.
 # Append lists with correct and incorrect words in both languages, russian ban words from the word_list
 def word_check(word_list):
     correct_word_list = []
@@ -104,10 +101,21 @@ def word_check(word_list):
             "ban_word_list": ban_word_list}
 
 
-# Step 3.1. Call the functions below to analyze the text
+# Call the functions below to analyze the text
 def check(text):
     found_emoticon = emoticon_find(text)
     counted_token = token_count(text, found_emoticon["emoticon_list"])
     checked_word = word_check(counted_token["word_list"])
 
     return {"counted_token": counted_token, "checked_word": checked_word, "found_emoticon": found_emoticon}
+
+
+# Form result by creating dictionary with all the lists and their names
+def form_result(result):
+    list_dict = []
+
+    for function_result in result.values():
+        for k, v in function_result.items():
+            list_dict.append((k, v))
+
+    return list_dict
