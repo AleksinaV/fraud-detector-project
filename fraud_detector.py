@@ -1,6 +1,5 @@
 # Step 0.
 # Import libraries
-# import pickle
 import text_checker
 
 
@@ -45,16 +44,12 @@ def main(text):
     display_result(result_dict)
     count_result(result_dict)
 
+    return result_dict
 
-# Step #1. Open and read the base_text.txt
-# with open('base_text.txt', 'r', encoding='utf-8') as file:
-#     base_text = file.read()
-# Step #2. Call the main() function
-# main(base_text)
 
 # Step 1.
 # Order text from the console
-input_text = input("Please, input a text: ")
+# input_text = input("Please, input a text: ")
 
 # Step 2. Call the main() function
-main(input_text)
+# main(input_text)

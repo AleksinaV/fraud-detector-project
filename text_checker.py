@@ -1,7 +1,6 @@
 import pymorphy3
 import emot
 import re
-# from nltk.tokenize import word_tokenize
 
 
 morph = pymorphy3.MorphAnalyzer()
@@ -58,7 +57,7 @@ def token_count(text, emoticon_list):
 
 
 # Step 3.1.3.
-# Append lists with correct and incorrect words, names and surnames, ban words from the word_list
+# Append lists with correct and incorrect words in both languages, russian ban words from the word_list
 def word_check(word_list):
     correct_word_list = []
     en_correct_word_list = []
@@ -96,7 +95,7 @@ def word_check(word_list):
             if word in lst:
                 in_lst = True
 
-        if not in_lst:
+        if not in_lst and word not in incorrect_word_list:
             incorrect_word_list.append(word)
 
     return {"correct_word_list": correct_word_list,
