@@ -27,6 +27,7 @@ def token_check(tokenized_text):
     mixed_word_list = []
     digit_list = []
     symbol_list = []
+    trash_list = []
 
     # Каждый токен в токенизированном тексте проверяется на соответствие условиям
     for token in tokenized_text:
@@ -49,6 +50,10 @@ def token_check(tokenized_text):
             symbol_list.append(token)  # Каждый токен, состоящий из вышеперечисленных символов, должен быть добавлен
             # в symbol_list
 
+        else:
+            trash_list.append(token)    # Каждый токен, состоящий из набора символов разных типов, должен быть
+            # добавлен в trash_list
+
     # Возвращается словарь, состоящий из ключей-названий списков и значений-списков, которые соответствуют своему
     # названию
     return {"word_list": word_list,
@@ -56,7 +61,8 @@ def token_check(tokenized_text):
             "latin_word_list": latin_word_list,
             "mixed_word_list": mixed_word_list,
             "digit_list": digit_list,
-            "symbol_list": symbol_list}
+            "symbol_list": symbol_list,
+            "trash_list": trash_list}
 
 
 def word_check(cyrillic_word_list, latin_word_list):
