@@ -1,13 +1,5 @@
-import pickle
 import text_checker
-
-
-def collect_data(file_name):
-    unpickled_result = pickle.load(open(file_name, 'rb'))
-
-    base_result = text_checker.form_result(unpickled_result)
-
-    return base_result
+import text_serializer
 
 
 def compare_parameters(input_result, base_result):
@@ -28,7 +20,19 @@ def compare_parameters(input_result, base_result):
 
 def count_parameters(dictio):
     parameters_amount = 0
-    for key in list(dictio.keys())[1::]:
+    for key in list(dictio.keys()):
         parameters_amount += len(dictio[key])
 
     return parameters_amount
+
+
+def fraud_detect(result_dict):
+    fraud_detection = compare_parameters(result_dict,
+                                         text_checker.form_result(text_serializer.deserialize('base_result.pkl')))
+
+    if fraud_detection[0]:
+        print("\nMaybe text was written by a scammer.")
+    else:
+        print("\nMaybe text was not written by a scammer.")
+
+    print(f"input_coefficient = {fraud_detection[1]}, base_coefficient = {fraud_detection[2]}")
