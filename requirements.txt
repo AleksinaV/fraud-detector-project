@@ -1,0 +1,2 @@
+emot
+pymorphy3
