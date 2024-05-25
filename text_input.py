@@ -29,11 +29,11 @@ def order_text():
     display_result(result_dict)
     count_result(result_dict)
 
-    if_scammer = compare_texts.compare_parameters(result_dict, compare_texts.collect_data())
+    fraud_detection = compare_texts.compare_parameters(result_dict, compare_texts.collect_data('base_result.pkl'))
 
-    if if_scammer[0]:
+    if fraud_detection[0]:
         print("\nMaybe text was written by a scammer.")
     else:
         print("\nMaybe text was not written by a scammer.")
 
-    print(f"input_coefficient = {if_scammer[1]}, base_coefficient = {if_scammer[2]}")
+    print(f"input_coefficient = {fraud_detection[1]}, base_coefficient = {fraud_detection[2]}")

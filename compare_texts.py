@@ -1,10 +1,10 @@
 import pickle
-
 import text_checker
 
 
-def collect_data():
-    unpickled_result = pickle.load(open('base_result.pkl', 'rb'))
+def collect_data(file_name):
+    unpickled_result = pickle.load(open(file_name, 'rb'))
+
     base_result = text_checker.form_result(unpickled_result)
 
     return base_result

@@ -2,11 +2,15 @@ import text_checker
 import pickle
 
 
-def serialize():
+def process_data(file_name):
     # Open and read the base_text.txt
-    with open('base_text.txt', 'r', encoding='utf-8') as file:
+    with open(file_name, 'r', encoding='utf-8') as file:
         base_text = file.read()
 
     checked_text = text_checker.check(base_text)
 
-    pickle.dump(checked_text, open('base_result.pkl', 'wb'))
+    return checked_text
+
+
+def serialize(text, file_name):
+    pickle.dump(text, open(file_name, 'wb'))

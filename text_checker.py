@@ -9,7 +9,7 @@ morph = pymorphy3.MorphAnalyzer()
 # Tokenize the text into words and symbols
 def tokenize_text(text):
     tokens = re.findall(r'(\b\w+\b|\S)', text)
-    # tokens = word_tokenize(text)
+
     return tokens
 
 
@@ -31,6 +31,7 @@ def token_count(text, emoticon_list):
     symbol_list = []
 
     tokenized_text = tokenize_text(text)
+
     for token in tokenized_text:
         if token.isalpha():
             word_list.append(token)
@@ -40,8 +41,10 @@ def token_count(text, emoticon_list):
                 latin_word_list.append(token)
             else:
                 mixed_word_list.append(token)
+
         elif token.isdigit():
             digit_list.append(token)
+
         else:
             if token not in emoticon_list:
                 symbol_list.append(token)
@@ -68,8 +71,9 @@ def word_check(word_list):
                  "russian_ban_words.txt": ban_word_list}
 
     for file_name in file_dict.keys():
-        with (open(file_name, encoding="utf-8") as current_file):
+        with open(file_name, encoding="utf-8") as current_file:
             current_file = current_file.read().lower().split()
+
             for word in word_list:
                 if word.lower() in current_file:
                     file_dict[file_name].append(word)
