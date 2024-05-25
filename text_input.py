@@ -1,32 +1,39 @@
-from fraud_detector import main
+import text_checker
+import compare_texts
 
 
 # Display containment of all the lists
 def display_result(result):
-    print("\033[1;30;46mContainment of the lists:\033[0m")
-    for couple in result:
-        name_lst = couple[0]
-        lst = couple[1]
-
-        if len(lst) > 0:
-            print(f"===> \033[1m{name_lst}\033[0m:", lst)
+    print("\nContainment of the lists:")
+    for k, v in result.items():
+        if len(v) > 0:
+            print(f"===> {k}:", v)
 
 
 # Count and display length of all the lists
 def count_result(result):
-    print("\033[1;30;45mLength of the lists:\033[0m")
-    for couple in result:
-        name_lst = couple[0]
-        lst = couple[1]
-
-        len_lst = len(lst)
+    print("\nLength of the lists:")
+    for k, v in result.items():
+        len_lst = len(v)
         if len_lst > 0:
-            print(f"===> \033[1m{name_lst}\033[0m:", len_lst)
+            print(f"===> {k}:", len_lst)
 
 
 # Order text from the console
 def order_text():
     input_text = input("Please, input a text: ")
-    result_dict = main(input_text)
+
+    result = text_checker.check(input_text)
+    result_dict = text_checker.form_result(result)
+
     display_result(result_dict)
     count_result(result_dict)
+
+    if_scammer = compare_texts.compare_parameters(result_dict, compare_texts.collect_data())
+
+    if if_scammer[0]:
+        print("\nMaybe text was written by a scammer.")
+    else:
+        print("\nMaybe text was not written by a scammer.")
+
+    print(f"input_coefficient = {if_scammer[1]}, base_coefficient = {if_scammer[2]}")

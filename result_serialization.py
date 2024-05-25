@@ -1,5 +1,4 @@
 import text_checker
-from fraud_detector import main
 import pickle
 
 
@@ -11,4 +10,3 @@ def serialize():
     checked_text = text_checker.check(base_text)
 
     pickle.dump(checked_text, open('base_result.pkl', 'wb'))
-    # unpickled_resilt = pickle.load(open('base_result.pkl', 'rb'))

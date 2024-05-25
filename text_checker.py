@@ -76,7 +76,7 @@ def word_check(word_list):
                 else:
                     normal_word = morph.parse(word)[0].normal_form
                     if normal_word.lower() in current_file:
-                        file_dict[file_name].append(normal_word)
+                        file_dict[file_name].append(word)
 
                 in_lst = False
                 for lst in file_dict.values():
@@ -112,10 +112,10 @@ def check(text):
 
 # Form result by creating dictionary with all the lists and their names
 def form_result(result):
-    list_dict = []
+    list_dict = {}
 
     for function_result in result.values():
         for k, v in function_result.items():
-            list_dict.append((k, v))
+            list_dict.update({k: v})
 
     return list_dict
