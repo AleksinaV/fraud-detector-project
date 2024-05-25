@@ -65,7 +65,6 @@ def word_check(cyrillic_word_list, latin_word_list):
     en_correct_word_list = []
     ban_word_list = []
 
-    questionable_list = []
     incorrect_word_list = []
 
     # Инициализируются словари, относящиеся к русскому и английскому языкам и состоящие из ключей-названий файлов и
@@ -82,6 +81,8 @@ def word_check(cyrillic_word_list, latin_word_list):
 
     # Каждое значение словаря ru_en_dict проходит данный цикл
     for language_requirement in ru_en_dict.values():
+        questionable_list = []
+
         file_dict = language_requirement[0]  # В данной переменной находится соответствующий языку словарь со
         # списками параметров
         layout_list = language_requirement[1]  # В данной переменной находится список с соответствующей языку раскладкой
@@ -127,7 +128,7 @@ def word_check(cyrillic_word_list, latin_word_list):
             for lst in file_dict.values():
                 if word in lst:
                     in_lst = True
-
+                    break
             if not in_lst and word not in incorrect_word_list:
                 incorrect_word_list.append(word)  # Каждое слово, которое не было обнаружено ни в одном списке и до
                 # сих пор не находится в incorrect_word_list, должно быть добавлено в оный
