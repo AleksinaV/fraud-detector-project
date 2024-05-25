@@ -1,5 +1,4 @@
 import text_checker
-import text_comparer
 
 
 # Display containment of all the lists
