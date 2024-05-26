@@ -28,7 +28,7 @@ def count_parameters(dictio):
 
 def fraud_detect(result_dict):
     fraud_detection = compare_parameters(result_dict,
-                                         text_checker.form_result(text_serializer.deserialize('base_result.pkl')))
+                                         text_checker.form_result(text_serializer.deserialize_file('base_result.pkl')))
 
     if fraud_detection[0]:
         print("\nMaybe text was written by a scammer.")

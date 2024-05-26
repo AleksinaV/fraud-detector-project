@@ -22,8 +22,8 @@ def main(mode):
             result_name = 'balance_result.pkl'
 
         read_text = text_inputer.process_file(file_name)
-        text_serializer.serialize(text_inputer.process_text(read_text), result_name)
-        result_dict = text_serializer.deserialize(result_name)
+        text_serializer.serialize_file(text_inputer.process_text(read_text), result_name)
+        result_dict = text_serializer.deserialize_file(result_name)
 
     text_inputer.display_result(result_dict)
 
