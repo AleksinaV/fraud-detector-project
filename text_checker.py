@@ -209,7 +209,37 @@ def find_card_numbers(text):
         card_numbers.update(matches)
 
     return {'card_list': list(card_numbers)}
+# поиск номеров телефона в тексте
+def find_phone_numbers(text):
+    # шаблоны номеров телефона
+    phone_patterns = [
+        # +7 (000) 000-00-00 (как с пробелами, так и без них)
+        r'\b\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}\b',
+        # +7 000 000-00-00 (как с пробелами, так и без них)
+        r'\b\+7\s?\d{3}\s?\d{3}-\d{2}-\d{2}\b',
+        # +7-000-000-00-00
+        r'\b\+7-\d{3}-\d{3}-\d{2}-\d{2}\b',
+        # 8 (000) 000-00-00 (как с пробелами, так и без них)
+        r'\b8\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}\b',
+        # 8 000 000-00-00 (как с пробелами, так и без них)
+        r'\b8\s?\d{3}\s?\d{3}-\d{2}-\d{2}\b',
+        # 8-000-000-00-00
+        r'\b8-\d{3}-\d{3}-\d{2}-\d{2}\b',
+        # +7 000 000 0000 (как с пробелами, так и без них)
+        r'\b\+7\s?\d{3}\s?\d{3}\s?\d{4}\b',
+        # 8 000 000 0000 (как с пробелами, так и без них)
+        r'\b8\s?\d{3}\s?\d{3}\s?\d{4}\b',
+        # +7 (000) 000 0000 (как с пробелами, так и без них)
+        r'\b\+7\s?\(\d{3}\)\s?\d{3}\s?\d{4}\b',
+        # 8 (000) 000 0000 (как с пробелами, так и без них)
+        r'\b8\s?\(\d{3}\)\s?\d{3}\s?\d{4}\b'
+    ]
+    phone_numbers = []
+    for pattern in phone_patterns:
+        matches = re.findall(pattern, text)
+        phone_numbers.extend(matches)
 
+    return {'phone_numbers': phone_numbers}
 
 def check(text):
     # Вызываются функции, необходимые для обработки текста, и сохраняются их возвращённые значения в соответствующие
@@ -218,13 +248,15 @@ def check(text):
     counted_token = token_check(tokenize_text(text), found_emoticon["emoticon_list"])
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
     found_card_numbers = find_card_numbers(text)
+    found_phone_numbers = find_phone_numbers(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
     return {"counted_token": counted_token,
             "checked_word": checked_word,
             "found_emoticon": found_emoticon,
-            "found_card_numbers": found_card_numbers}
+            "found_card_numbers": found_card_numbers,
+            "found_phone_numbers": found_phone_numbers}
 
 
 def form_result(result_dict):
