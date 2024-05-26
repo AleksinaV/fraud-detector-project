@@ -1,5 +1,5 @@
-import pymorphy3    # https://github.com/no-plagiarism/pymorphy3
-import emot     # https://github.com/NeelShah18/emot
+import pymorphy3  # https://github.com/no-plagiarism/pymorphy3
+import emot  # https://github.com/NeelShah18/emot
 import re
 
 morph = pymorphy3.MorphAnalyzer()
@@ -61,7 +61,7 @@ def token_check(tokenized_text, emoticon_list):
             # должен быть добавлен в express_list
 
         elif token in "$€£₽₸₴₮₱֏₩¥₦₲₫₭₡₾₼₹₵৳ƒ₪฿":
-            currency_list.append(token)    # Каждый токен, содержащий в себе что-либо из вышеперечисленных символов,
+            currency_list.append(token)  # Каждый токен, содержащий в себе что-либо из вышеперечисленных символов,
             # должен быть добавлен в currency_list
 
         else:
@@ -174,11 +174,12 @@ def word_check(cyrillic_word_list, latin_word_list):
             "en_correct_word_list": en_correct_word_list,
             "incorrect_word_list": incorrect_word_list,
             "ban_word_list": ban_word_list}
-    
+
+
 # поиск номеров карт в тексте
 def find_card_numbers(text):
     # шаблоны номеров карт
-    cards =[
+    cards = [
         # карты Visa
         r'\b4\d{15}\b',
         r'\b4\d{3} \d{4} \d{4} \d{4}\b',
@@ -190,24 +191,24 @@ def find_card_numbers(text):
         r'\b2[2-7]\d{14}\b',
         r'\b2[2-7]\d{2}-\d{4}-\d{4}-\d{4}\b',
         r'\b2[2-7]\d{2} \d{4} \d{4} \d{4}\b',
-        #карты Мир
+        # карты Мир
         r'\b220[0-4][0-9]{12,15}\b',
-        r'\b220[0-4] \d{4} \d{4} \d{4}\b', #16 цифр с разделителями
+        r'\b220[0-4] \d{4} \d{4} \d{4}\b',  # 16 цифр с разделителями
         r'\b220[0-4]-\d{4}-\d{4}-\d{4}\b',
-        r'\b220[0-4] \d{4} \d{4} \d{5}\b', # 17 цифр с разделителями
+        r'\b220[0-4] \d{4} \d{4} \d{5}\b',  # 17 цифр с разделителями
         r'\b220[0-4]-\d{4}-\d{4}-\d{5}\b',
-        r'\b220[0-4]\d{4} \d{10}\b', #18 цифр с разделителями
+        r'\b220[0-4]\d{4} \d{10}\b',  # 18 цифр с разделителями
         r'\b220[0-4]\d{4}-\d{10}\b',
-        r'\b220[0-4]\d{3} \d{4} \d{4} \d{4}\b', #19 цифр с разделителями
+        r'\b220[0-4]\d{3} \d{4} \d{4} \d{4}\b',  # 19 цифр с разделителями
         r'\b220[0-4]\d{3}-\d{4}-\d{4}-\d{4}\b'
     ]
-    card_numbers = set() #Создаем пустое множество, для дальнейшего добавления в него найденных номеров
+    card_numbers = set()  # Создаем пустое множество, для дальнейшего добавления в него найденных номеров
 
     for numbers in cards:
         matches = re.findall(numbers, text)
         card_numbers.update(matches)
 
-    return {'card_numbers': list(card_numbers)}
+    return {'card_list': list(card_numbers)}
 
 
 def check(text):
