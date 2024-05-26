@@ -217,6 +217,7 @@ def find_phone_numbers(text):
     return {'phone_numbers': phone_numbers}
     
 # находим глаголы в повелительном наклонении
+
 def find_imperative_verbs(text):
     def is_imperative_verb(word):
         # находим все возможные интерпретации слова
