@@ -240,7 +240,27 @@ def find_phone_numbers(text):
         phone_numbers.extend(matches)
 
     return {'phone_numbers': phone_numbers}
+    
+# находим глаголы в повелительном наклонении
+def find_imperative_verbs(text):
+    # загрузка словарей, необходимых для морфологического анализа
+    morph = pymorphy3.MorphAnalyzer()
 
+    def is_imperative_verb(word):
+        # находим все возможные интерпретации слова
+        parsed_words = morph.parse(word)
+        for parsed_word in parsed_words:
+            # определяем, что слово является глаголом в форме повелительного наклонения
+            if parsed_word.tag.POS == 'VERB' and 'impr' in parsed_word.tag:
+                return True
+        return False
+    #ищем слова в тексте
+    words = re.findall(r'\b\w+\b', text)
+
+    # находим все побудительные глаголы
+    imperative_verbs = [word for word in words if is_imperative_verb(word)]
+
+    return {'imperative_verbs': imperative_verbs}
 def check(text):
     # Вызываются функции, необходимые для обработки текста, и сохраняются их возвращённые значения в соответствующие
     # переменные
@@ -249,6 +269,7 @@ def check(text):
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
     found_card_numbers = find_card_numbers(text)
     found_phone_numbers = find_phone_numbers(text)
+    found_imperative_verbs = find_imperative_verbs(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
@@ -256,7 +277,8 @@ def check(text):
             "checked_word": checked_word,
             "found_emoticon": found_emoticon,
             "found_card_numbers": found_card_numbers,
-            "found_phone_numbers": found_phone_numbers}
+            "found_phone_numbers": found_phone_numbers,
+            "found_imperative_verbs": found_imperative_verbs}
 
 
 def form_result(result_dict):
