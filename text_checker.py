@@ -181,6 +181,8 @@ def find_card_numbers(text):
     cards =[
         # карты Visa
         r'\b4\d{15}\b',
+        r'\b4\d{3} \d{4} \d{4} \d{4}\b',
+        r'\b4\d{3}-\d{4}-\d{4}-\d{4}\b',
         # карты Mastercard
         r'\b5[1-5]\d{14}\b',
         r'\b5[1-5]\d{2}-\d{4}-\d{4}-\d{4}\b'
