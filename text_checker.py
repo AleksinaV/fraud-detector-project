@@ -194,14 +194,16 @@ def find_card_numbers(text):
     card_numbers = set()  # Создаем пустое множество, для дальнейшего добавления в него найденных номеров
 
     for numbers in cards:
-        matches = re.findall(numbers, text)
-        card_numbers.update(matches)
+        matches_ = re.findall(numbers, text)
+        card_numbers.update(matches_)
 
     return {'card_list': list(card_numbers)}
+
+
 # поиск номеров телефона в тексте
 def find_phone_numbers(text):
     # шаблоны номеров телефона
-     phone_patterns = [
+    phone_patterns = [
         # +7/8 (000) 000-00-00 и +7/8 000 000-00-00(как с пробелами, так и без них)
         r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}-\d{2}-\d{2}\b',
         # +7/8-000-000-00-00
@@ -215,7 +217,8 @@ def find_phone_numbers(text):
         phone_numbers.extend(matches)
 
     return {'phone_numbers': phone_numbers}
-    
+
+
 # находим глаголы в повелительном наклонении
 
 def find_imperative_verbs(text):
@@ -227,13 +230,16 @@ def find_imperative_verbs(text):
             if parsed_word.tag.POS == 'VERB' and 'impr' in parsed_word.tag:
                 return True
         return False
-    #ищем слова в тексте
+
+    # ищем слова в тексте
     words = tokenize_text(text)
 
     # находим все побудительные глаголы
     imperative_verbs = [word for word in words if is_imperative_verb(word)]
 
     return {'imperative_verbs': imperative_verbs}
+
+
 def check(text):
     # Вызываются функции, необходимые для обработки текста, и сохраняются их возвращённые значения в соответствующие
     # переменные
