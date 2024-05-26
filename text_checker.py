@@ -232,9 +232,6 @@ def find_phone_numbers(text):
     
 # находим глаголы в повелительном наклонении
 def find_imperative_verbs(text):
-    # загрузка словарей, необходимых для морфологического анализа
-    morph = pymorphy3.MorphAnalyzer()
-
     def is_imperative_verb(word):
         # находим все возможные интерпретации слова
         parsed_words = morph.parse(word)
@@ -244,7 +241,7 @@ def find_imperative_verbs(text):
                 return True
         return False
     #ищем слова в тексте
-    words = re.findall(r'\b\w+\b', text)
+    words = tokenize_text(text)
 
     # находим все побудительные глаголы
     imperative_verbs = [word for word in words if is_imperative_verb(word)]
