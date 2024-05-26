@@ -138,6 +138,26 @@ def word_check(cyrillic_word_list, latin_word_list):
             "en_correct_word_list": en_correct_word_list,
             "incorrect_word_list": incorrect_word_list,
             "ban_word_list": ban_word_list}
+    
+# поиск номеров карт в тексте
+def find_card_numbers(text):
+    # шаблоны номеров карт
+    cards = [
+        # карты Visa
+        r'\b4\d{15}\b',
+        # карты Mastercard
+        r'\b5[1-5]\d{14}\b',
+        r'\b2[2-7]\d{14}\b',
+        #карты Мир
+        r'\b220[0-4][0-9]{12,15}\b'
+    ]
+    card_numbers = set() #Создаем пустое множество, для дальнейшего добавления в него найденных номеров
+
+    for numbers in cards:
+        matches = re.findall(numbers, text)
+        card_numbers.update(matches)
+
+    return {'card_numbers': list(card_numbers)}
 
 
 def check(text):
@@ -145,12 +165,14 @@ def check(text):
     found_emoticon = emoticon_find(text)
     counted_token = token_check(tokenize_text(text))
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
+    found_card_numbers = find_card_numbers(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
     return {"counted_token": counted_token,
             "checked_word": checked_word,
-            "found_emoticon": found_emoticon}
+            "found_emoticon": found_emoticon,
+            "found_card_numbers": found_card_numbers}
 
 
 def form_result(result_dict):
