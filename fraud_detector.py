@@ -7,7 +7,7 @@ import text_comparer
 def main(mode):
     if mode == 0:
         result_dict = text_inputer.process_text(text_inputer.input_text())
-        text_comparer.fraud_detect(result_dict)
+        # text_comparer.fraud_detect(result_dict)
 
     else:
         file_name = "test_text.txt"
@@ -28,4 +28,4 @@ def main(mode):
     text_inputer.display_result(result_dict)
 
 
-main(1)
+main(0)

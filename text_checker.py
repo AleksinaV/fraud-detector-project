@@ -1,5 +1,5 @@
-import pymorphy3    # https://github.com/no-plagiarism/pymorphy3
-import emot     # https://github.com/NeelShah18/emot
+import pymorphy3  # https://github.com/no-plagiarism/pymorphy3
+import emot  # https://github.com/NeelShah18/emot
 import re
 
 morph = pymorphy3.MorphAnalyzer()
@@ -61,7 +61,7 @@ def token_check(tokenized_text, emoticon_list):
             # должен быть добавлен в express_list
 
         elif token in "$€£₽₸₴₮₱֏₩¥₦₲₫₭₡₾₼₹₵৳ƒ₪฿":
-            currency_list.append(token)    # Каждый токен, содержащий в себе что-либо из вышеперечисленных символов,
+            currency_list.append(token)  # Каждый токен, содержащий в себе что-либо из вышеперечисленных символов,
             # должен быть добавлен в currency_list
 
         else:
@@ -174,40 +174,70 @@ def word_check(cyrillic_word_list, latin_word_list):
             "en_correct_word_list": en_correct_word_list,
             "incorrect_word_list": incorrect_word_list,
             "ban_word_list": ban_word_list}
-    
+
+
 # поиск номеров карт в тексте
 def find_card_numbers(text):
     # шаблоны номеров карт
-    cards =[
+    cards = [
         # карты Visa
-        r'\b4\d{15}\b',
-        r'\b4\d{3} \d{4} \d{4} \d{4}\b',
-        r'\b4\d{3}-\d{4}-\d{4}-\d{4}\b',
+        r'\b4\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
         # карты Mastercard
-        r'\b5[1-5]\d{14}\b',
-        r'\b5[1-5]\d{2}-\d{4}-\d{4}-\d{4}\b'
-        r'\b5[1-5]\d{2} \d{4} \d{4} \d{4}\b'
-        r'\b2[2-7]\d{14}\b',
-        r'\b2[2-7]\d{2}-\d{4}-\d{4}-\d{4}\b',
-        r'\b2[2-7]\d{2} \d{4} \d{4} \d{4}\b',
-        #карты Мир
-        r'\b220[0-4][0-9]{12,15}\b',
-        r'\b220[0-4] \d{4} \d{4} \d{4}\b', #16 цифр с разделителями
-        r'\b220[0-4]-\d{4}-\d{4}-\d{4}\b',
-        r'\b220[0-4] \d{4} \d{4} \d{5}\b', # 17 цифр с разделителями
-        r'\b220[0-4]-\d{4}-\d{4}-\d{5}\b',
-        r'\b220[0-4]\d{4} \d{10}\b', #18 цифр с разделителями
-        r'\b220[0-4]\d{4}-\d{10}\b',
-        r'\b220[0-4]\d{3} \d{4} \d{4} \d{4}\b', #19 цифр с разделителями
-        r'\b220[0-4]\d{3}-\d{4}-\d{4}-\d{4}\b'
+        r'\b5[1-5]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+        r'\b2[2-7]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+        # карты Мир
+        r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',  # 16 цифр
+        r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{5}\b',  # 17 цифр
+        r'\b220[0-4]\d{4}[-\s]?\d{10}\b',  # 18 цифр 
+        r'\b220[0-4]\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b'
     ]
-    card_numbers = set() #Создаем пустое множество, для дальнейшего добавления в него найденных номеров
+    card_numbers = set()  # Создаем пустое множество, для дальнейшего добавления в него найденных номеров
 
     for numbers in cards:
-        matches = re.findall(numbers, text)
-        card_numbers.update(matches)
+        matches_ = re.findall(numbers, text)
+        card_numbers.update(matches_)
 
-    return {'card_numbers': list(card_numbers)}
+    return {'card_list': list(card_numbers)}
+
+
+# поиск номеров телефона в тексте
+def find_phone_numbers(text):
+    # шаблоны номеров телефона
+    phone_patterns = [
+        # +7/8 (000) 000-00-00 и +7/8 000 000-00-00(как с пробелами, так и без них)
+        r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}-\d{2}-\d{2}\b',
+        # +7/8-000-000-00-00
+        r'(?:\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}\b',
+        # +7/8 000 000 0000 и +7/8 (000) 000 0000 (как с пробелами, так и без них)
+        r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}\s?\d{4}\b'
+    ]
+    phone_numbers = []
+    for pattern in phone_patterns:
+        matches = re.findall(pattern, text)
+        phone_numbers.extend(matches)
+
+    return {'phone_numbers': phone_numbers}
+
+
+# находим глаголы в повелительном наклонении
+
+def find_imperative_verbs(text):
+    def is_imperative_verb(word):
+        # находим все возможные интерпретации слова
+        parsed_words = morph.parse(word)
+        for parsed_word in parsed_words:
+            # определяем, что слово является глаголом в форме повелительного наклонения
+            if parsed_word.tag.POS == 'VERB' and 'impr' in parsed_word.tag:
+                return True
+        return False
+
+    # ищем слова в тексте
+    words = tokenize_text(text)
+
+    # находим все побудительные глаголы
+    imperative_verbs = [word for word in words if is_imperative_verb(word)]
+
+    return {'imperative_verbs': imperative_verbs}
 
 
 def check(text):
@@ -217,13 +247,17 @@ def check(text):
     counted_token = token_check(tokenize_text(text), found_emoticon["emoticon_list"])
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
     found_card_numbers = find_card_numbers(text)
+    found_phone_numbers = find_phone_numbers(text)
+    found_imperative_verbs = find_imperative_verbs(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
     return {"counted_token": counted_token,
             "checked_word": checked_word,
             "found_emoticon": found_emoticon,
-            "found_card_numbers": found_card_numbers}
+            "found_card_numbers": found_card_numbers,
+            "found_phone_numbers": found_phone_numbers,
+            "found_imperative_verbs": found_imperative_verbs}
 
 
 def form_result(result_dict):
