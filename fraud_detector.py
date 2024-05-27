@@ -56,7 +56,7 @@ def main(mode):
         os.remove(result_name)
 
 
-main(0)
+main(1)
 
 
 def update_corpus():
