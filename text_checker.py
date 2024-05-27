@@ -166,7 +166,6 @@ def word_check(cyrillic_word_list, latin_word_list):
 
 
 # находим глаголы в повелительном наклонении
-
 def find_imperative_verbs(text):
     def is_imperative_verb(word):
         # находим все возможные интерпретации слова
@@ -266,7 +265,8 @@ def find_capitalized_text(word_list):
         if word.isalpha() and word.isupper() and len(word) > 1:
             capitalized_text.append(word)
     return {"capitalized_text": capitalized_text}
-=======
+
+
 def find_personal_info(text):
     # поиск номеров карт в тексте
     def find_card_numbers(text):
