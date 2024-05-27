@@ -1,38 +1,77 @@
-import text_checker
+import os
+
+import coef_calc
+import file_cryptor
 import text_serializer
 
 
-def compare_parameters(input_result, base_result):
-    base_words_amount = len(base_result["word_list"])
-    input_words_amount = len(input_result["word_list"])
-
-    base_parameters_amount = count_parameters(base_result)
-    input_parameters_amount = count_parameters(input_result)
-
-    base_coefficient = round((base_parameters_amount / base_words_amount), 2)
-    input_coefficient = round((input_parameters_amount / input_words_amount), 2)
-
-    if input_coefficient >= base_coefficient:
-        return [True, input_coefficient, base_coefficient]
-    else:
-        return [False, input_coefficient, base_coefficient]
-
-
 def count_parameters(dictio):
-    parameters_amount = 0
-    for key in list(dictio.keys()):
-        parameters_amount += len(dictio[key])
+    params_list = []
+    for lst in list(dictio.values())[1::]:
+        params_list.append(len(lst))
 
-    return parameters_amount
+    return params_list
 
 
-def fraud_detect(result_dict):
-    fraud_detection = compare_parameters(result_dict,
-                                         text_checker.form_result(text_serializer.deserialize_file('base_result.pkl')))
+def form_fraud_coef():
+    base_result = text_serializer.deserialize_file('base_result.pkl')
+    file_cryptor.decrypt_file('crypt_balance_result.pkl',
+                              'balance_result.pkl')
+    balance_result = text_serializer.deserialize_file('balance_result.pkl')
 
-    if fraud_detection[0]:
-        print("\nMaybe text was written by a scammer.")
+    text1_params = count_parameters(base_result)
+    text2_params = count_parameters(balance_result)
+
+    text1_word_count = len(base_result['word_list'])
+    text2_word_count = len(balance_result['word_list'])
+
+    fraud_coefficient = coef_calc.calculate_weight(text1_params, text1_word_count,
+                                                                text2_params, text2_word_count)
+
+    text_serializer.serialize_file(fraud_coefficient, 'fraud_coef.pkl')
+
+
+def count_coef(result_dict):
+    fraud_coef = text_serializer.deserialize_file('fraud_coef.pkl')
+
+    len_list = count_parameters(result_dict)
+
+    result_coef = 0
+    for i in fraud_coef:
+        for j in len_list:
+            result_coef += (i * j)
+
+    result = result_coef / len(result_dict['word_list'])
+
+    return result
+
+
+def compare_coef(user_coef):
+    with open('coef.txt') as file:
+        fraud_coef = file.readline()
+
+    if float(user_coef) >= float(fraud_coef):
+        print("\nMaybe this text was written by a scammer.")
     else:
-        print("\nMaybe text was not written by a scammer.")
+        print("\nMaybe this text was not written by a scammer.")
 
-    print(f"input_coefficient = {fraud_detection[1]}, base_coefficient = {fraud_detection[2]}")
+    print(f"fraud_coef: {fraud_coef}user_coef: {user_coef}")
+
+
+def update_coef():
+    form_fraud_coef()
+
+    base_coef = count_coef(text_serializer.deserialize_file('base_result.pkl'))
+
+    file_cryptor.decrypt_file('crypt_balance_result.pkl',
+                              'balance_result.pkl')
+    balance_coef = count_coef(text_serializer.deserialize_file('balance_result.pkl'))
+
+    with open('coef.txt', 'a') as file:
+        file.truncate(0)
+        file.write(str(base_coef) + '\n' + str(balance_coef))
+
+    os.remove('balance_result.pkl')
+
+
+# update_coef()
