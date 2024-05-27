@@ -13,16 +13,6 @@ def tokenize_text(text):
     return tokens
 
 
-# Производится обработка текста, приводящая к нахождению эмотиконов
-def emoticon_find(text):
-    emot_obj = emot.core.emot()
-    emot_dict = emot_obj.emoji(text)
-
-    # Возвращается словарь, состоящий из ключей-названий списков и значений-списков, которые соответствуют своему
-    # названию
-    return {"emoticon_list": emot_dict['value']}
-
-
 def token_check(tokenized_text, emoticon_list):
     # Инициализируются все списки, в которые в дальнейшем будут добавляться соответствующие им токены
     word_list = []
@@ -176,49 +166,6 @@ def word_check(cyrillic_word_list, latin_word_list):
             "ban_word_list": ban_word_list}
 
 
-# поиск номеров карт в тексте
-def find_card_numbers(text):
-    # шаблоны номеров карт
-    cards = [
-        # карты Visa
-        r'\b4\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
-        # карты Mastercard
-        r'\b5[1-5]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
-        r'\b2[2-7]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
-        # карты Мир
-        r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',  # 16 цифр
-        r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{5}\b',  # 17 цифр
-        r'\b220[0-4]\d{4}[-\s]?\d{10}\b',  # 18 цифр 
-        r'\b220[0-4]\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b'
-    ]
-    card_numbers = set()  # Создаем пустое множество, для дальнейшего добавления в него найденных номеров
-
-    for numbers in cards:
-        matches_ = re.findall(numbers, text)
-        card_numbers.update(matches_)
-
-    return {'card_list': list(card_numbers)}
-
-
-# поиск номеров телефона в тексте
-def find_phone_numbers(text):
-    # шаблоны номеров телефона
-    phone_patterns = [
-        # +7/8 (000) 000-00-00 и +7/8 000 000-00-00(как с пробелами, так и без них)
-        r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}-\d{2}-\d{2}\b',
-        # +7/8-000-000-00-00
-        r'(?:\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}\b',
-        # +7/8 000 000 0000 и +7/8 (000) 000 0000 (как с пробелами, так и без них)
-        r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}\s?\d{4}\b'
-    ]
-    phone_numbers = []
-    for pattern in phone_patterns:
-        matches = re.findall(pattern, text)
-        phone_numbers.extend(matches)
-
-    return {'phone_numbers': phone_numbers}
-
-
 # находим глаголы в повелительном наклонении
 
 def find_imperative_verbs(text):
@@ -240,23 +187,90 @@ def find_imperative_verbs(text):
     return {'imperative_verbs': imperative_verbs}
 
 
+def find_personal_info(text):
+    # поиск номеров карт в тексте
+    def find_card_numbers(text):
+        # шаблоны номеров карт
+        cards = [
+            # карты Visa
+            r'\b4\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+            # карты Mastercard
+            r'\b5[1-5]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+            r'\b2[2-7]\d{2}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+            # карты Мир
+            r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',  # 16 цифр
+            r'\b220[0-4][-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{5}\b',  # 17 цифр
+            r'\b220[0-4]\d{4}[-\s]?\d{10}\b',  # 18 цифр
+            r'\b220[0-4]\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b'
+        ]
+        card_numbers = set()  # Создаем пустое множество, для дальнейшего добавления в него найденных номеров
+
+        for numbers in cards:
+            matches_ = re.findall(numbers, text)
+            card_numbers.update(matches_)
+
+        return {'card_list': list(card_numbers)}
+
+    # поиск номеров телефона в тексте
+    def find_phone_numbers(text):
+        # шаблоны номеров телефона
+        phone_patterns = [
+            # +7/8 (000) 000-00-00 и +7/8 000 000-00-00(как с пробелами, так и без них)
+            r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}-\d{2}-\d{2}\b',
+            # +7/8-000-000-00-00
+            r'(?:\+7|8)-\d{3}-\d{3}-\d{2}-\d{2}\b',
+            # +7/8 000 000 0000 и +7/8 (000) 000 0000 (как с пробелами, так и без них)
+            r'(?:\+7|8)\s?\(?\d{3}\)?\s?\d{3}\s?\d{4}\b'
+        ]
+        phone_numbers = []
+        for pattern in phone_patterns:
+            matches = re.findall(pattern, text)
+            phone_numbers.extend(matches)
+
+        return {'phone_numbers_list': phone_numbers}
+
+    found_card_numbers = find_card_numbers(text)
+    found_phone_numbers = find_phone_numbers(text)
+
+    result_dict = {}
+    result_dict.update(found_card_numbers)
+    result_dict.update(found_phone_numbers)
+
+    return result_dict
+
+
+def find_expressive(text):
+    # Производится обработка текста, приводящая к нахождению эмотиконов
+    def emoticon_find(text):
+        emot_obj = emot.core.emot()
+        emot_dict = emot_obj.emoji(text)
+
+        # Возвращается словарь, состоящий из ключей-названий списков и значений-списков, которые соответствуют своему
+        # названию
+        return {"emoticon_list": emot_dict['value']}
+
+    found_emoticon = emoticon_find(text)
+
+    result_dict = {}
+    result_dict.update(found_emoticon)
+
+    return result_dict
+
+
 def check(text):
     # Вызываются функции, необходимые для обработки текста, и сохраняются их возвращённые значения в соответствующие
     # переменные
-    found_emoticon = emoticon_find(text)
-    counted_token = token_check(tokenize_text(text), found_emoticon["emoticon_list"])
+    found_expressive = find_expressive(text)
+    counted_token = token_check(tokenize_text(text), found_expressive["emoticon_list"])
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
-    found_card_numbers = find_card_numbers(text)
-    found_phone_numbers = find_phone_numbers(text)
+    found_personal_info = find_personal_info(text)
     found_imperative_verbs = find_imperative_verbs(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
     return {"counted_token": counted_token,
             "checked_word": checked_word,
-            "found_emoticon": found_emoticon,
-            "found_card_numbers": found_card_numbers,
-            "found_phone_numbers": found_phone_numbers,
+            "found_personal_info": found_personal_info,
             "found_imperative_verbs": found_imperative_verbs}
 
 
