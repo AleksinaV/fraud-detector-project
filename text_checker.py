@@ -76,7 +76,6 @@ def token_check(tokenized_text, emoticon_list):
             "latin_word_list": latin_word_list,
             "mixed_word_list": mixed_word_list,
             "digit_list": digit_list,
-            "symbol_list": symbol_list,
             "express_list": express_list,
             "currency_list": currency_list,
             "trash_list": trash_list}
