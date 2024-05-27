@@ -1,2 +1,4 @@
 emot
 pymorphy3
+numpy
+scipy
