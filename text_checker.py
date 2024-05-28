@@ -66,7 +66,6 @@ def token_check(tokenized_text, emoticon_list):
             "latin_word_list": latin_word_list,
             "mixed_word_list": mixed_word_list,
             "digit_list": digit_list,
-            "express_list": express_list,
             "currency_list": currency_list,
             "trash_list": trash_list}
 
@@ -185,89 +184,7 @@ def find_imperative_verbs(text):
     return {'imperative_verbs': imperative_verbs}
 
 
-
-# Поиск чрезмерных знаков восклицания
-def find_excessive_exclamations(text):
-    excessive_exclamations = []
-    words = text.split()
-    for word in words:
-        exclamation_count = 0
-        for char in word:
-            if char == '!':
-                exclamation_count += 1
-                if exclamation_count > 1:
-                    excessive_exclamations.append(word)
-                    break
-    return {"excessive_exclamations": excessive_exclamations}
-
-
-# Поиск чрезмерных вопросительных знаков
-def find_excessive_questions(text):
-    excessive_questions = []
-    words = text.split()
-    for word in words:
-        questions_count = 0
-        for char in word:
-            if char == '?':
-                questions_count += 1
-                if questions_count > 1:
-                    excessive_questions.append(word)
-                    break
-    return {"excessive_questions": excessive_questions}
-
-
-# Поиск знаков восклицания с вопросительными знаками
-def find_question_and_exclamation(text):
-    question_and_exclamation = []
-    words = text.split()
-    for word in words:
-        found_alternation = False
-        current_punctuation = []
-        for char in word:
-            if char == '!' or '?':
-                if current_punctuation and current_punctuation[-1] != char:
-                    current_punctuation.append(char)
-                    found_alternation = True
-                elif not current_punctuation:
-                    current_punctuation.append(char)
-                else:
-                    current_punctuation = [char]
-            else:
-                if found_alternation:
-                    question_and_exclamation.append(word)
-                    break
-                current_punctuation = []
-        if found_alternation and "".join(current_punctuation) in word:
-            question_and_exclamation.append(word)
-    return {"question_and_exclamation": question_and_exclamation}
-
-
-# Поиск ссылок
-def find_links(text):
-    link_pattern = re.compile(r'([a-zA-Z0-9\-_]+\.[a-zA-Z]{2,}([a-zA-Z0-9\-\._~:/?#\[\]@!\$&\'\(\)\*\+,;=]'
-                              r'*)|www\.[a-zA-Z0-9\-_]+\.[a-zA-Z]{2,}([a-zA-Z0-9\-\._~:/?#\[\]@!\$&\'\(\)\*\+,;=]*))')
-    links = link_pattern.findall(text)
-    links = [link[0] for link in links]
-    return {"links": links}
-
-
-# Поиск электронных почт
-def find_emails(text):
-    email_pattern = r"[a-zA-Z0-9.+_-]+@[a -zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-    emails = re.findall(email_pattern, text)
-    return {"emails": emails}
-
-
-# Поиск капитализированных слов
-def find_capitalized_text(word_list):
-    capitalized_text = []
-    for word in word_list:
-        if word.isalpha() and word.isupper() and len(word) > 1:
-            capitalized_text.append(word)
-    return {"capitalized_text": capitalized_text}
-
-
-def find_personal_info(text):
+def find_precise_info(text):
     # поиск номеров карт в тексте
     def find_card_numbers(text):
         # шаблоны номеров карт
@@ -309,12 +226,30 @@ def find_personal_info(text):
 
         return {'phone_numbers_list': phone_numbers}
 
+    # Поиск электронных почт
+    def find_emails(text):
+        email_pattern = r"[a-zA-Z0-9.+_-]+@[a -zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        emails = re.findall(email_pattern, text)
+        return {"emails": emails}
+
+    # Поиск ссылок
+    def find_links(text):
+        link_pattern = re.compile(r'([a-zA-Z0-9\-_]+\.[a-zA-Z]{2,}([a-zA-Z0-9\-\._~:/?#\[\]@!\$&\'\(\)\*\+,;=]'
+                                  r'*)|www\.[a-zA-Z0-9\-_]+\.[a-zA-Z]{2,}([a-zA-Z0-9\-\._~:/?#\[\]@!\$&\'\(\)\*\+,;=]*))')
+        links = link_pattern.findall(text)
+        links = [link[0] for link in links]
+        return {"links": links}
+
     found_card_numbers = find_card_numbers(text)
     found_phone_numbers = find_phone_numbers(text)
+    found_emails = find_emails(text)
+    found_links = find_links(text)
 
     result_dict = {}
     result_dict.update(found_card_numbers)
     result_dict.update(found_phone_numbers)
+    result_dict.update(found_emails)
+    result_dict.update(found_links)
 
     return result_dict
 
@@ -329,12 +264,81 @@ def find_expressive(text):
         # названию
         return {"emoticon_list": emot_dict['value']}
 
+    # Поиск чрезмерных знаков восклицания
+    def find_excessive_exclamations(text):
+        excessive_exclamations = []
+        words = text.split()
+        for word in words:
+            exclamation_count = 0
+            for char in word:
+                if char == '!':
+                    exclamation_count += 1
+                    if exclamation_count > 1:
+                        excessive_exclamations.append(word)
+                        break
+        return {"excessive_exclamations": excessive_exclamations}
+
+    # Поиск чрезмерных вопросительных знаков
+    def find_excessive_questions(text):
+        excessive_questions = []
+        words = text.split()
+        for word in words:
+            questions_count = 0
+            for char in word:
+                if char == '?':
+                    questions_count += 1
+                    if questions_count > 1:
+                        excessive_questions.append(word)
+                        break
+        return {"excessive_questions": excessive_questions}
+
+    # Поиск знаков восклицания с вопросительными знаками
+    def find_question_and_exclamation(text):
+        question_and_exclamation = []
+        words = text.split()
+        for word in words:
+            found_alternation = False
+            current_punctuation = []
+            for char in word:
+                if char == '!' or '?':
+                    if current_punctuation and current_punctuation[-1] != char:
+                        current_punctuation.append(char)
+                        found_alternation = True
+                    elif not current_punctuation:
+                        current_punctuation.append(char)
+                    else:
+                        current_punctuation = [char]
+                else:
+                    if found_alternation:
+                        question_and_exclamation.append(word)
+                        break
+                    current_punctuation = []
+            if found_alternation and "".join(current_punctuation) in word:
+                question_and_exclamation.append(word)
+        return {"question_and_exclamation": question_and_exclamation}
+
+
     found_emoticon = emoticon_find(text)
+    found_excessive_exclamations = find_excessive_exclamations(text)
+    found_excessive_questions = find_excessive_questions(text)
+    found_question_and_exclamation = find_question_and_exclamation(text)
 
     result_dict = {}
     result_dict.update(found_emoticon)
+    result_dict.update(found_excessive_exclamations)
+    result_dict.update(found_excessive_questions)
+    result_dict.update(found_question_and_exclamation)
 
     return result_dict
+
+
+# Поиск капитализированных слов
+def find_capitalized_text(word_list):
+    capitalized_text = []
+    for word in word_list:
+        if word.isalpha() and word.isupper() and len(word) > 1:
+            capitalized_text.append(word)
+    return {"capitalized_text": capitalized_text}
 
 
 def check(text):
@@ -343,15 +347,18 @@ def check(text):
     found_expressive = find_expressive(text)
     counted_token = token_check(tokenize_text(text), found_expressive["emoticon_list"])
     checked_word = word_check(counted_token["cyrillic_word_list"], counted_token["latin_word_list"])
-    found_personal_info = find_personal_info(text)
+    found_precise_info = find_precise_info(text)
     found_imperative_verbs = find_imperative_verbs(text)
+    found_capitalized_text = find_capitalized_text(text)
+    found_expressive = find_expressive(text)
 
     # Возвращается словарь, состоящий из ключей-названий словарей и значений-словарей, которые соответствуют своему
     # названию
     return {"counted_token": counted_token,
             "checked_word": checked_word,
-            "found_personal_info": found_personal_info,
-            "found_imperative_verbs": found_imperative_verbs}
+            "found_precise_info": found_precise_info,
+            "found_imperative_verbs": found_imperative_verbs,
+            "found_capitalized_text": found_capitalized_text}
 
 
 def form_result(result_dict):
