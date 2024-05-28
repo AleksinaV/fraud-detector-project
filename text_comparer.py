@@ -50,7 +50,7 @@ def compare_coef(user_coef):
     with open('coef.txt') as file:
         fraud_coef = file.readline()
 
-    if float(user_coef) >= round(float(fraud_coef)):
+    if float(user_coef) >= float(fraud_coef):
         print("\nMaybe this text was written by a scammer.")
     else:
         print("\nMaybe this text was not written by a scammer.")
@@ -74,4 +74,4 @@ def update_coef():
     # os.remove('balance_result.pkl')
 
 
-update_coef()
+# update_coef()
