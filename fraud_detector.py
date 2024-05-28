@@ -1,5 +1,3 @@
-import os
-
 import file_cryptor
 import text_comparer
 import text_inputer
@@ -52,11 +50,8 @@ def main(mode):
         text_serializer.serialize_file(result_dict, result_name)  # Результат обработки сериализуется для оптимизации
         # обращения к данным результатам
 
-        # file_cryptor.encrypt_file(file_name, 'crypt_' + file_name)   Корпус балансировки шифруется (опционально)
-        # file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)   Результат обработки шифруется (опционально)
-        # Исходные файлы (незашифрованные) должны быть удалены из ОС (опционально)
-        # os.remove(file_name)
-        # os.remove(result_name)
+        file_cryptor.encrypt_file(file_name, 'crypt_' + file_name)  # Корпус балансировки шифруется (опционально)
+        file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)  # Результат обработки шифруется (опционально)
 
 
 main(0)
@@ -70,3 +65,6 @@ def update_corpus():
 def update_all():
     update_corpus()
     text_comparer.update_coef()
+
+
+# update_all()
