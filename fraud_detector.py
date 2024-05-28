@@ -1,5 +1,3 @@
-import os
-
 import file_cryptor
 import text_comparer
 import text_inputer
@@ -10,6 +8,11 @@ import text_serializer
 def main(mode):
     # Режим, при котором необходимо ввести проверяемый текст в консоль
     if mode == 0:
+        print("Disclaimer: The corpus of texts written by the scammers was compiled from their written speech from "
+              "various messengers.\nIt is possible that if you use texts taken from other sources (letters, "
+              "oral speech, posts) to verify, the result may be unreliable.\nPlease do not base your decisions "
+              "on the results of this program.\n")
+
         result_dict = text_inputer.process_text(text_inputer.input_text())  # Введённый текст обрабатывается
         text_inputer.display_result(result_dict)  # Результат обработки выводится на экран
 
@@ -47,14 +50,11 @@ def main(mode):
         text_serializer.serialize_file(result_dict, result_name)  # Результат обработки сериализуется для оптимизации
         # обращения к данным результатам
 
-        # file_cryptor.encrypt_file(file_name, 'crypt_' + file_name)   Корпус балансировки шифруется (опционально)
-        # file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)   Результат обработки шифруется (опционально)
-        # Исходные файлы (незашифрованные) должны быть удалены из ОС (опционально)
-        # os.remove(file_name)
-        # os.remove(result_name)
+        file_cryptor.encrypt_file(file_name, 'crypt_' + file_name)  # Корпус балансировки шифруется (опционально)
+        file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)  # Результат обработки шифруется (опционально)
 
 
-# main(0)
+main(0)
 
 
 def update_corpus():
@@ -62,4 +62,9 @@ def update_corpus():
     main(3)
 
 
-update_corpus()
+def update_all():
+    update_corpus()
+    text_comparer.update_coef()
+
+
+# update_all()

@@ -76,13 +76,17 @@ def word_check(cyrillic_word_list, latin_word_list):
     en_correct_word_list = []
     ban_word_list = []
     incorrect_word_list = []
+    trigger_words_list = []
+    en_trigger_words_list = []
 
     # Инициализируются словари, относящиеся к русскому и английскому языкам и состоящие из ключей-названий файлов и
     # значений-списков, в которые в дальнейшем будут добавляться обнаруженные в соответствующем файле слова
     russian_file_dict = {"russian_words.txt": correct_word_list,
-                         "russian_ban_words.txt": ban_word_list}
+                         "russian_ban_words.txt": ban_word_list,
+                         "russian_trigger_words.txt": trigger_words_list}
 
-    english_file_dict = {"english_words.txt": en_correct_word_list}
+    english_file_dict = {"english_words.txt": en_correct_word_list,
+                         "english_trigger_words.txt": en_trigger_words_list}
 
     # Инициализируется словарь, состоящий из ключей-языков, к которым относятся их значения-списки. Оные содержат
     # словарь соответствующего языка и список со словами соответствующей раскладки
@@ -161,7 +165,9 @@ def word_check(cyrillic_word_list, latin_word_list):
     return {"correct_word_list": correct_word_list,
             "en_correct_word_list": en_correct_word_list,
             "incorrect_word_list": incorrect_word_list,
-            "ban_word_list": ban_word_list}
+            "ban_word_list": ban_word_list,
+            "trigger_word_list": trigger_words_list,
+            "en_trigger_words_list": en_trigger_words_list}
 
 
 # находим глаголы в повелительном наклонении
