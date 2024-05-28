@@ -16,7 +16,9 @@ def main(mode):
         result_dict = text_inputer.process_text(text_inputer.input_text())  # Введённый текст обрабатывается
         text_inputer.display_result(result_dict)  # Результат обработки выводится на экран
 
-        text_comparer.compare_coef(text_comparer.count_coef(result_dict))
+        coef = text_comparer.count_coef(result_dict)
+        if coef:
+            text_comparer.compare_coef(coef)
 
     # Режим с тестовым текстом потенциального мошенника
     if mode == 1:
@@ -25,7 +27,9 @@ def main(mode):
         # обрабатывается
         text_inputer.display_result(result_dict)  # Результат обработки выводится на экран
 
-        text_comparer.compare_coef(text_comparer.count_coef(result_dict))
+        coef = text_comparer.count_coef(result_dict)
+        if coef:
+            text_comparer.compare_coef(coef)
 
     # Режим, который обращается к корпусу мошенников
     if mode == 2:
@@ -42,19 +46,13 @@ def main(mode):
         file_name = 'balance_text.txt'
         result_name = 'balance_result.pkl'
 
-        # file_cryptor.decrypt_file('crypt_' + file_name, file_name)    Корпус необходимо расшифровать по паролю
-        # (опционально)
-
         read_text = text_inputer.process_file(file_name)  # Происходит открытие файла
         result_dict = text_inputer.process_text(read_text)  # Текст из файла обрабатывается
         text_serializer.serialize_file(result_dict, result_name)  # Результат обработки сериализуется для оптимизации
         # обращения к данным результатам
 
-        file_cryptor.encrypt_file(file_name, 'crypt_' + file_name)  # Корпус балансировки шифруется (опционально)
-        file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)  # Результат обработки шифруется (опционально)
 
-
-# main(0)
+main(0)
 
 
 def update_corpus():
@@ -67,4 +65,4 @@ def update_all():
     text_comparer.update_coef()
 
 
-update_all()
+# update_all()

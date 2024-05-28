@@ -13,8 +13,6 @@ def count_parameters(dictio):
 
 def form_fraud_coef():
     base_result = text_serializer.deserialize_file('base_result.pkl')
-    # file_cryptor.decrypt_file('crypt_balance_result.pkl',
-    #                           'balance_result.pkl')
     balance_result = text_serializer.deserialize_file('balance_result.pkl')
 
     text1_params = count_parameters(base_result)
@@ -39,9 +37,15 @@ def count_coef(result_dict):
         for j in len_list:
             result_coef += (i * j)
 
-    result = result_coef / len(result_dict['word_list'])
+    len_result_dict = len(result_dict['word_list'])
+    if len_result_dict > 0:
+        result = result_coef / len_result_dict
 
-    return result
+        return result
+
+    else:
+        print("\nword_list are empty.")
+        return False
 
 
 def compare_coef(user_coef):
