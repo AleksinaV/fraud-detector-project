@@ -53,6 +53,10 @@ bankrupt
 debt
 password
 client
+fraud
+fraudster
+fraudulent
+scam
 
 sale
 lottery
