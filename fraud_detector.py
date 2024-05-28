@@ -54,7 +54,7 @@ def main(mode):
         file_cryptor.encrypt_file(result_name, 'crypt_' + result_name)  # Результат обработки шифруется (опционально)
 
 
-main(0)
+# main(0)
 
 
 def update_corpus():
@@ -67,4 +67,4 @@ def update_all():
     text_comparer.update_coef()
 
 
-# update_all()
+update_all()
