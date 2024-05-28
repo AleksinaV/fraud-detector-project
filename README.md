@@ -1,7 +1,9 @@
 # fraud-detector-project
 This repository is designed to help determine if the text was written for the purpose of fraud. 
 
-We have collected a corpus of texts based on written messages from scammers from various messengers, as well as a corpus based on the personal messages of the average user (encrypted to save personal data). 
+We have collected a corpus of texts based on written messages from russian-speaking scammers from various messengers, as well as a corpus based on the personal messages of the average russian-speaking user (encrypted to save personal data). 
+
+The repository is focused on texts written primarily in Russian with few assumptions (there is a check for correctly written English words and English trigger words; the pymorphy library, used to determine some parameters, in addition to the Russian language, also supports Ukrainian).
 
 Next, we searched for those parameters that could indicate whether the author of the text is a fraud. For example, the following turned out to be explicit markers: motivational verbs, trigger words, overly expressive symbols (!!!, ???, ?!?!), emoticons, etc.
 
@@ -16,6 +18,8 @@ The corpus with the texts of scammers (base_text.txt) is freely available. If yo
 ======
 
 Этот репозиторий предназначен для того, чтобы помочь определить, был ли текст написан с целью мошенничества. 
+
+Репозиторий ориентирован на тексты, написанные преимущественно на русском языке с небольшими допущениями (идёт проверка на правильно написанные английские слова и на английские слова-триггеры; библиотека pymorphy, используемая при определении некоторых параметров, помимо русского языка, также поддерживает и украинский).
 
 Мы собрали корпус текстов, основанных на письменных сообщениях мошенников из различных мессенджеров, а также корпус, основанный на личных сообщениях среднестатического юзера (зашифрован для сохранения личных данных). 
 
