@@ -4,10 +4,13 @@ mastercard
 maestro
 unionpay
 nfc
+vpn
 coronapay
 contact
 avito
 telegram
+viber
+whatsapp
 ozon
 wb
 wildberries
