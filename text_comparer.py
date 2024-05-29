@@ -1,5 +1,4 @@
 import coef_calc
-import file_cryptor
 import text_serializer
 
 
@@ -64,9 +63,6 @@ def update_coef():
     form_fraud_coef()
 
     base_coef = count_coef(text_serializer.deserialize_file('base_result.pkl'))
-
-    file_cryptor.decrypt_file('crypt_balance_result.pkl',
-                              'balance_result.pkl')
     balance_coef = count_coef(text_serializer.deserialize_file('balance_result.pkl'))
 
     with open('coef.txt', 'a') as file:
