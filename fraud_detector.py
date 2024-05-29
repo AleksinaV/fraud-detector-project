@@ -1,4 +1,3 @@
-import file_cryptor
 import text_comparer
 import text_inputer
 import text_serializer
@@ -8,10 +7,7 @@ import text_serializer
 def main(mode):
     # Режим, при котором необходимо ввести проверяемый текст в консоль
     if mode == 0:
-        print("Disclaimer: The corpus of texts written by the scammers was compiled from their written speech from "
-              "various messengers.\nIt is possible that if you use texts taken from other sources (letters, "
-              "oral speech, posts) to verify, the result may be unreliable.\nPlease do not base your decisions "
-              "on the results of this program.\n")
+        print("Disclaimer: Please do not base your decisions on the results of this program.\n")
 
         result_dict = text_inputer.process_text(text_inputer.input_text())  # Введённый текст обрабатывается
         text_inputer.display_result(result_dict)  # Результат обработки выводится на экран
